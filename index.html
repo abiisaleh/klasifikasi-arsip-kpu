@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Katalog Klasifikasi Arsip</title>
+
+    <!-- Tailwind CSS untuk Styling Modern -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- DataTables CSS -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css"
+    />
+
+    <style>
+      /* Custom Styling untuk menyelaraskan DataTables dengan Tailwind */
+      .dataTables_wrapper .dataTables_filter input {
+        border: 1px solid #e2e8f0;
+        border-radius: 0.5rem;
+        padding: 0.4rem 0.8rem;
+        margin-bottom: 1rem;
+      }
+      .dataTables_wrapper .dataTables_length select {
+        border: 1px solid #e2e8f0;
+        border-radius: 0.4rem;
+        padding: 0.2rem 0.5rem;
+      }
+      table.dataTable {
+        border-collapse: collapse !important;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      }
+      table.dataTable thead th {
+        background-color: #f8fafc;
+        color: #1e293b;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+        border-bottom: 2px solid #e2e8f0 !important;
+      }
+      .container {
+        max-width: 1000px;
+      }
+
+      /* Kolom kode tetap dipotong (titik-titik) */
+      .kode-column {
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Kolom nama akan membuat baris baru jika panjang */
+      .nama-column {
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: normal !important; /* Memaksa teks turun ke bawah */
+        line-height: 1.4; /* Memberi ruang antar baris agar enak dibaca */
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 min-h-screen py-10 px-4">
+    <div class="container mx-auto">
+      <div class="bg-white p-8 rounded-xl shadow-lg">
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold text-slate-800">
+            Daftar Klasifikasi Arsip KPU
+          </h1>
+          <p class="text-slate-500 text-sm">
+            Menampilkan kodefikasi dan nama kategori berdasarkan data arsip.
+            sumber data: srikandi (terakhir diambil: 3 April 2026)
+          </p>
+        </div>
+
+        <!-- Tabel -->
+        <table
+          id="arsipTable"
+          class="display responsive nowrap w-full"
+          style="width: 100%"
+        >
+          <thead>
+            <tr>
+              <th class="px-4 py-3 text-left">Kode</th>
+              <th class="px-4 py-3 text-left">Nama Klasifikasi</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+
+    <!-- Dependencies: jQuery dan DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        // Inisialisasi DataTables
+        $("#arsipTable").DataTable({
+          ajax: "file.json", // Pastikan file ini bisa diakses via HTTP
+          columns: [
+            {
+              data: "kode",
+              width: "10px", // Tentukan lebar di sini
+            },
+            {
+              data: "nama",
+              width: "auto",
+              className: "nama-column", // Tambahkan class CSS di sini
+            },
+          ],
+          responsive: true,
+          language: {
+            search: "Cari data:",
+            lengthMenu: "Tampilkan _MENU_ data",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+            paginate: {
+              first: "Pertama",
+              last: "Terakhir",
+              next: "Lanjut",
+              previous: "Kembali",
+            },
+          },
+          columnDefs: [
+            { className: "border-b border-slate-100", targets: "_all" },
+          ],
+        });
+      });
+    </script>
+  </body>
+</html>
